@@ -1,0 +1,16 @@
+RewriteEngine On
+RewriteBase /rackmountsetc
+
+#RewriteCond %{REQUEST_URI} !/construction.html$ [NC]
+#RewriteCond %{REQUEST_URI} !\.(jpe?g?|png|gif) [NC]
+#RewriteRule .* ./construction.html [R=302,L]
+ 
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)/(.*)/(.*).html$ index.php?realm=$1&page=$2&what=$3 [NC,L,QSA]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)/(.*).html$ index.php?realm=$1&page=$2 [NC,L,QSA]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*).html$ index.php?realm=$1 [NC,L,QSA]
