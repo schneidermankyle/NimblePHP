@@ -47,7 +47,7 @@ defined('SYSTEM') OR exit('Error direct access not allowed');
  * @author Kyle Schneiderman
  */
 
-class NMBL_Exceptions extends \System\Core
+class NMBL_Exceptions
 {
 	
 	
@@ -137,6 +137,22 @@ class NMBL_Exceptions extends \System\Core
 		}
 	}
 
+	/**
+	 * Class registry
+	 *
+	 * Displays an error at beginning of page, can optionally
+	 * stop script from executing on rest of page. If perameters
+	 * are empty, will display a simple message letting the user
+	 * know there was an unkown error
+	 *
+	 * @param	int		(Optional) Error code you wish to display
+	 * @param	string 	(Optional) The message you would like displayed		
+	 * @param	bool	(Optional) If set, stops page from executing
+	 * @return	void
+	 */
+	public function DisplayMessage() {
+
+	}
 
 	/**
 	 * Class registry
@@ -165,8 +181,9 @@ class NMBL_Exceptions extends \System\Core
 			$message = $this->getMessage($code);
 		}
 
-		if (isset($this->Templater)) {
-			// We use the template library
+		if (true == false) {
+			// Let's check to see if template is available.
+			// Templater should be a static class in the system
 		} else {
 			// We need to make a quick and dirty string
 			$output = "<h2>Error ".$code."</h2><p>The following runtime error was encountered: ".$message."</p>";
@@ -178,5 +195,29 @@ class NMBL_Exceptions extends \System\Core
 			exit($code);
 		}
 		
+	}
+
+	/**
+	 * A quick function for setting our header and output messages
+	 *
+	 * @param	(int) HTTP status code
+	 * @param	(string) Text to be displayed with the error
+	 * @return	void
+	 */
+	public function &SetStatus($code = 200, $text = '') {
+		if (empty($code)) {
+			// We need to exit and display or log an error, return to this.
+		}
+
+		if (empty($text)) {
+			if (isset($this->status[$code])) {
+				$text = $this->status(intval($code));
+			} else {
+				// Error, we need a proper status code
+			}
+		}
+
+		header('Status: '.$code.' '.$text, true);
+
 	}
 }

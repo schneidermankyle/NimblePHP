@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Nimble PHP
  *
@@ -36,31 +35,33 @@
  * @filesource
  */
 
-defined('SYSTEM') OR exit('Error, direct access not allowed');
+defined("SYSTEM") or exit("Error direct access not allowed");
+
+//**************************************************************************
+// SYSTEM FILE
+//**************************************************************************
+//
+// This file is meant to hold configuration and autoload settings for the 
+// main system. Typically this file will be left alone by the developer 
+// unless tweeks to the system are required. For most configuration settings,
+// please use the config and autoload files within the application/config
+// namespace
+//
+//**************************************************************************
+
 
 /*
- * ------------------------------------------------------
- *  Load application map
- * ------------------------------------------------------
- */
-require_once(SYSTEM.'core/map.php');
-
-/*
- * ------------------------------------------------------
- *  Load common functions
- * ------------------------------------------------------
- */
-require_once(CORE.'core.php');
-
-/*
- * ------------------------------------------------------
- *  Instantiate our system
- * ------------------------------------------------------
- */
-$System = new \System\Core;
-
-// System is where we initialize any classes and functions that are needed to run the system.
-// Bring in user defined settings
-require APPLICATION."/config/config.php";
-
-echo ("we are ready ");
+| -------------------------------------------------------------------
+|  Auto-load Core Packages
+| -------------------------------------------------------------------
+| Prototype:
+|
+|	$autoload["core"] = array("ClassName", "ClassName2");
+|
+| You can also include a associative array if you require to autoload
+| a package that is not in a default location:
+|
+|	$autoload["core"] = array("Exceptions", "System\Core"); 
+|
+*/
+$autoload["core"] = array("Exceptions");

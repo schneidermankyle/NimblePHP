@@ -48,86 +48,15 @@ defined('SYSTEM') OR exit('Error direct access not allowed');
 
 class Core {
 
-	/**
-	 * A quick function for setting our header and output messages
-	 *
-	 * @param	(int) HTTP status code
-	 * @param	(string) Text to be displayed with the error
-	 * @return	void
-	 */
-	public function &set_status($code = 200, $text = '') {
-		if (empty($code)) {
-			// We need to exit and display or log an error, return to this.
-		}
 
-		if (empty($text)) {
-			$status = array(
-				// Information responses
-				100 => 'Continue',
-				101 => 'Switching Protocol',
-				// Successful responses
-				200 => 'Ok',
-				201 => 'Created',
-				202 => 'Accepted',
-				203 => 'Non-Authoritative Information',
-				204 => 'No Content',
-				205 => 'Reset Content',
-				206 => 'Partial Content',
-				// Redirection messages
-				300 => 'Multiple Choice',
-				301 => 'Moved Permanently',
-				302 => 'Found',
-				303 => 'See Other',
-				304 => 'Not Modified',
-				305 => 'Use Proxy',
-				307 => 'Temporary Redirect',
-				308 => 'Permanent Redirect',
-				// Client error messages
-				400 => 'Bad Request',
-				401 => 'Unauthorized',
-				402 => 'Payment Required',
-				403 => 'Forbidden',
-				404 => 'Not Found',
-				405 => 'Method Not Allowed',
-				406 => 'Not Acceptable',
-				407 => 'Proxy Authentication Required',
-				408 => 'Request Timeout',
-				409 => 'conflict',
-				410 => 'Gone',
-				411 => 'Length Required',
-				412 => 'Precondition Failed',
-				413 => 'Payload Too Large',
-				414 => 'URI Too Large',
-				415 => 'Unsupported Media Type',
-				416 => 'Requested Range Not Satisfiable',
-				417 => 'Expectation Failed',
-				421 => 'Misdirected Request',
-				426 => 'Upgrade Required',
-				428 => 'Precondition Required',
-				429 => 'Too Many Requests',
-				431 => 'Request Header Fields Too Large',
-				451 => 'Unavailable For Legal Reasons',
-				// Server error messages
-				500 => 'Internal Server Error',
-				501 => 'Not Implemented',
-				502 => 'Bad Gateway',
-				503 => 'Service Unavailable',
-				504 => 'Gateway Timeout',
-				505 => 'HTTP Version Not Supported',
-				506 => 'Variant Also Negotiates',
-				507 => 'Variant Also Negotiates',
-				511 => 'Network Authentication Required'
-			);
-
-			if (isset($status[$code])) {
-				$text = $status(intval($code));
-			} else {
-				// Error, we need a proper status code
-			}
-		}
-
-		header('Status: '.$code.' '.$text, true);
-
+	function __construct() {
+		// We will always need this config class
+		$this->LoadClass("Config", "Core");
+		// and will always want to load this particular system settings.
+		$this->Config->Load("settings");
+		// Lastly we will always want to call autoload to ensure that the 
+		// proper classes are loaded from the start
+		$this->Autoload();
 	}
 
 	/**
@@ -144,7 +73,7 @@ class Core {
 	 * @param	string	optional parameter to pass to class
 	 * @return	object
 	 */
-	public function &load_class($name, $directory = 'libraries', $namespace = "\System\Core\\", $parameters = null) {
+	public function &LoadClass($name, $directory = 'libraries', $namespace = "\System\Core\\", $parameters = null) {
 		static $_classes = [];
 
 		// We will use this to reference the classname and status
@@ -168,10 +97,9 @@ class Core {
 
 				// Since there is no class available and we haven't loaded a class yet
 				// Let's check to see if the file exists.
-				if (file_exists($location.$directory.'/'.$name.'.php')) {
-					require_once($location.$directory.'/'.$name.'.php');
+				if (file_exists($location.$directory.DIRECTORY_SEPARATOR.$name.'.php')) {
+					require_once($location.$directory.DIRECTORY_SEPARATOR.$name.'.php');
 					$loaded = true;
-
 				}
 			}
 		} else {
@@ -209,11 +137,45 @@ class Core {
 	 * @return	object
 	 */
 
-	public function &show_error() {
+	public function &LoadFile() {
 
-		
-		// We are going to need the exceptions class for this.
+		// This is to just load a file into memory. 
 		
 		echo ('<br/>This was from Core<br/>');
 	}
+
+	/**
+	 * Class registry
+	 *
+	 * Autoload will loop through Config object and load classes automatically
+	 *
+	 * @return	void
+	 */
+	public function &Autoload() {
+		// First we need to check to see that our autoload file is there
+		if (isset($this->Config) && is_object($this->Config)) {
+			// First we need to grab our key type to ensure we are pulling from 
+			// the correct directory
+			foreach ($this->Config->Autoload as $_type => $_array) {
+				// Now let's loop through the child array
+				if (is_array($_array)) {
+
+					foreach ($_array as $_class) {
+						// If this is an array, it means we have a non std location
+						$_location = (is_array($_class)) ? $_class[1] : $_type;
+						$_name = (is_array($_class)) ? $_class[0] : $_class;
+
+						$this->LoadClass($_name, $_location); // This ignores namepsace, a problem we must fix!
+					}	
+				} else {
+					// We had some invalid type being passed in log it
+					break;
+				}
+			}
+		}
+	}
+
+
+
+
 }
