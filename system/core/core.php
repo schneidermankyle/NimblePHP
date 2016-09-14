@@ -161,11 +161,14 @@ class Core {
 				if (is_array($_array)) {
 
 					foreach ($_array as $_class) {
-						// If this is an array, it means we have a non std location
-						$_location = (is_array($_class)) ? $_class[1] : $_type;
-						$_name = (is_array($_class)) ? $_class[0] : $_class;
 
-						$this->LoadClass($_name, $_location); // This ignores namepsace, a problem we must fix!
+						// If this is an array, it means we have a non std options or locations
+						$_name = (is_array($_class)) ? $_class[0] : $_class;
+						$_location = (is_array($_class)) ? $_class[1] : $_type;
+						$_namespace = (is_array($_class)) ? $_class[2] : "System\Core\\";
+						$_params = (is_array($_class)) ? $_class[3] : null;
+						$this->LoadClass($_name, $_location, $_namespace, $_params); // This ignores namepsace, a problem we must fix!
+						
 					}	
 				} else {
 					// We had some invalid type being passed in log it

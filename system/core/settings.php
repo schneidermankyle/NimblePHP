@@ -49,10 +49,22 @@ defined("SYSTEM") or exit("Error direct access not allowed");
 //
 //**************************************************************************
 
+/*
+| -------------------------------------------------------------------
+|  Configurations
+| -------------------------------------------------------------------
+|  Set the directory where system logs should be kept
+| 
+| Prototype:
+|
+|	$config["logs"] = "/system/logs/errors.log";
+|
+*/
+$config["logs"] = "/system/logs/errors.log";
 
 /*
 | -------------------------------------------------------------------
-|  Auto-load Core Packages
+|  Auto-load Packages
 | -------------------------------------------------------------------
 | Prototype:
 |
@@ -61,7 +73,12 @@ defined("SYSTEM") or exit("Error direct access not allowed");
 | You can also include a associative array if you require to autoload
 | a package that is not in a default location:
 |
-|	$autoload["core"] = array("Exceptions", "System\Core"); 
+|	$autoload["core"] = array("Exceptions" => "System\Core"); 
+|
+| Optionally, if more data is needed for your class, you can pass an
+| array with the extra values as given below:
+|
+|	$autoload["core"] = array("Exceptions" => array("System\Core", "System\Core\\", $System, "some parameter"));
 |
 */
-$autoload["core"] = array("Exceptions");
+$autoload["core"] = array("Exceptions", ["Logger", "Core", "System\Core\\", $config["logs"]] );

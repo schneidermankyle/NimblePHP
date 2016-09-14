@@ -43,5 +43,5 @@ defined('SYSTEM') OR exit('Error direct access not allowed');
  * ------------------------------------------------------
  */
 
-define('CORE', SYSTEM.'core/');
-define('LIBRARIES', SYSTEM.'libraries/');
+define('CORE', SYSTEM.'core'.DIRECTORY_SEPARATOR);
+define('LIBRARIES', SYSTEM.'libraries'.DIRECTORY_SEPARATOR);

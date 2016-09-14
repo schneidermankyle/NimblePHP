@@ -43,7 +43,7 @@ defined('SYSTEM') OR exit('Error, direct access not allowed');
  *  Load application map
  * ------------------------------------------------------
  */
-require_once(SYSTEM.'core/map.php');
+require_once(SYSTEM.'core'.DIRECTORY_SEPARATOR.'map.php');
 
 /*
  * ------------------------------------------------------

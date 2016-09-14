@@ -39,7 +39,7 @@
 
  defined("SYSTEM") or exit("Error direct access not allowed");
 
- class Developer {
+ class NMBL_Developer {
  	// common use tools for getting developer information on your project
  	// memory_get_usage()
  	// sys_getloadavg(); // needs windows implementation

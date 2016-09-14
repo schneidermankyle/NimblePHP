@@ -136,11 +136,6 @@ define('APPLICATION', $app_path);
 // Our root directory
 define('ROOT', $root);
 
-// clean up for garbage collection
-unset($root);
-unset($sys_path);
-unset($app_path);
-
 /****************************************************************
  * Start our main application
  ***************************************************************/

@@ -47,12 +47,19 @@ defined("SYSTEM") or exit("Error direct access not allowed");
  * @author		Kyle Schneiderman
  */
 
-class Logger {
+class NMBL_Logger {
 	private $path;
 	private $log;
 
-	function __construct(){
+	function __construct($_path){
 		// if config is available, set path and open file
+		if (isset($_path) && is_string($_path)) {
+			
+			// Then we need to check if it exists
+			if (!$this->verifyLog($_path)) {
+				$this->createLog($_path);
+			}
+		}
 	}
 
 	/**
@@ -65,8 +72,49 @@ class Logger {
 	 * @param	string	(Optional) The path at which log should be created
 	 * @return	bool
 	 */
-	private function createLog($_path) {
-		$path = (isset($path) && is_string($path)) ? $path : $this->log;
+	private function &createLog($_path) {
+		// Let's make sure we have a path set
+		$_path = (isset($_path) && is_string($_path)) ? $_path : $this->log;
+
+		// Now we need to make sure that 
+		$this->verifyDirectory($_path, true);
+	}
+
+	/**
+	 * Class registry
+	 *
+	 * Checks to see if the log directory does exist, if and and create is
+	 * set true, then go ahead and make it.
+	 *
+	 * @param	string	(Optional) The path at which log should be created
+	 * @return	bool
+	 */
+	private function &verifyDirectory($_path, $_create = false) {;
+		// Ensure that we are working with valid data
+		if (isset($_path) && is_string($_path)) {
+			$_length = (strrpos($_path, '/')) ? strrpos($_path, '/') : strrpos($_path, '\\');
+
+			// now lets grab the directory out of this path
+			$_path = ROOT.substr($_path, 1, $_length);
+
+			// Let's now check to see if this is a valid directory
+			if(!is_dir($_path)) {
+
+				// So it isn't do you want us create you one?
+				if ($_create === false)
+					return false;
+
+				// Let's try to create the new 
+				if (!mkdir($_path)) 
+					return false;
+
+				// Looks good otherwise
+				return true;
+			} 
+
+			// This this directory already exists, let's let the caller know
+			return true;
+		}
 	}
 
 	/**
@@ -78,8 +126,14 @@ class Logger {
 	 * @param	string	(Optional) The path at which log should be checked
 	 * @return	bool
 	 */
-	private function verifyLog($_path) {
-		// return results
+	private function &verifyLog($_path) {
+		// Let's make sure we have the path we are looking for
+		$_path = (isset($_path) && is_string($_path)) ? $_path : $this->path;
+
+		if (is_file($_path) && file_exists($_path))
+			return true;
+
+		return false;
 	}
 
 	/**
