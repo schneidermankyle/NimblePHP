@@ -59,6 +59,8 @@ defined("SYSTEM") or exit("Error direct access not allowed");
 |
 |	$config["logs"] = "/system/logs/errors.log";
 |
+| Note to always enter path in relation to root of application
+|
 */
 $config["logs"] = "/system/logs/errors.log";
 

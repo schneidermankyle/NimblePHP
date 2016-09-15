@@ -59,6 +59,7 @@ require_once(CORE.'core.php');
  */
 $System = new \System\Core;
 
+
 // System is where we initialize any classes and functions that are needed to run the system.
 // Bring in user defined settings
 require APPLICATION."/config/config.php";
