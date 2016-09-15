@@ -313,16 +313,46 @@ class NMBL_Logger {
 	/**
 	 * Class registry
 	 *
-	 * Dumps the currently opened log into an output stream.
-	 * Currently output can be set to one of two options:
-	 * 1) output stream directly on page 
-	 * 2) return output as a string 
+	 * Returns the unformatted contents of the currently selected
+	 * log file into string format
 	 *
-	 * @param	string 	The format of the output 
 	 * @return	string
 	 */
-	public function DisplayLog($_output) {
-		
+	public function GetLog() {
+		// Simply grab our content, then return it to the caller
+		$_content = file_get_contents($this->log);
+		if ($_content === false) 
+			return false;
+
+		return $_content;
+	}
+
+	/**
+	 * Class registry
+	 *
+	 * Dumps the contents of the currently selected log file
+	 * to the screen.
+	 *
+	 * @return	void
+	 */
+	public function DisplayLog() {
+		// Attempt to open our file
+		$_file = fopen($this->log, "rb");
+		if (!$_file) 
+			return false;
+
+		// Grab each line of the log, then send it to our screen formatted
+		while(($buffer = fgets($_file, 4096)) !== false) {
+			echo ($buffer."<br/>");
+		}
+		// There was an error
+		while(!feof($_file)) {
+			return false;
+		}
+
+		// Close and anounce to sender our success
+		fclose($_file);
+		return true;
 	}
 
 }
