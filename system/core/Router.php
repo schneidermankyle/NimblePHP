@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Nimble PHP
  *
@@ -36,33 +35,14 @@
  * @filesource
  */
 
+namespace System\Core;
+
 defined('SYSTEM') OR exit('Error, direct access not allowed');
 
-/*
- * ------------------------------------------------------
- *  Load application map
- * ------------------------------------------------------
+/**
+ * Router Class
+ *
+ * @package Nimble PHP
+ * @subpackage System\Core
+ * @author Kyle Schneiderman
  */
-require_once(SYSTEM.'core'.DIRECTORY_SEPARATOR.'map.php');
-
-/*
- * ------------------------------------------------------
- *  Load common functions
- * ------------------------------------------------------
- */
-require_once(CORE.'core.php');
-
-/*
- * ------------------------------------------------------
- *  Instantiate our system
- * ------------------------------------------------------
- */
-$System = new \System\Core;
-
-// System is where we initialize any classes and functions that are needed to run the system.
-// Bring in user defined settings
-require APPLICATION."/config/config.php";
-
-// Need to create a router.
-
-echo ("we are ready ");
